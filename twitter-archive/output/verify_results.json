@@ -1,0 +1,71 @@
+{
+  "username": "Cyber_Sudo",
+  "records": [
+    {
+      "timestamp": "20220301132519",
+      "original_url": "https://twitter.com/Cyber_Sudo/status/1498650544851853312",
+      "archive_url": "https://web.archive.org/web/20220301132519/https://twitter.com/Cyber_Sudo/status/1498650544851853312",
+      "status_code": 200,
+      "final_url": "https://web.archive.org/web/20220301132519/https://twitter.com/Cyber_Sudo/status/1498650544851853312",
+      "content_type": "text/html;charset=utf-8",
+      "ok": true,
+      "error": null,
+      "tweet_id": "1498650544851853312"
+    },
+    {
+      "timestamp": "20220314145948",
+      "original_url": "https://twitter.com/Cyber_Sudo/status/1503385291788365828",
+      "archive_url": "https://web.archive.org/web/20220314145948/https://twitter.com/Cyber_Sudo/status/1503385291788365828",
+      "status_code": 200,
+      "final_url": "https://web.archive.org/web/20220314145948/https://twitter.com/Cyber_Sudo/status/1503385291788365828",
+      "content_type": "text/html;charset=utf-8",
+      "ok": true,
+      "error": null,
+      "tweet_id": "1503385291788365828"
+    },
+    {
+      "timestamp": "20220315201637",
+      "original_url": "https://twitter.com/Cyber_Sudo/status/1503827200788869129",
+      "archive_url": "https://web.archive.org/web/20220315201637/https://twitter.com/Cyber_Sudo/status/1503827200788869129",
+      "status_code": 200,
+      "final_url": "https://web.archive.org/web/20220315201637/https://twitter.com/Cyber_Sudo/status/1503827200788869129",
+      "content_type": "text/html;charset=utf-8",
+      "ok": true,
+      "error": null,
+      "tweet_id": "1503827200788869129"
+    },
+    {
+      "timestamp": "20220507102705",
+      "original_url": "https://twitter.com/Cyber_Sudo/status/1522885596120850432",
+      "archive_url": "https://web.archive.org/web/20220507102705/https://twitter.com/Cyber_Sudo/status/1522885596120850432",
+      "status_code": 200,
+      "final_url": "https://web.archive.org/web/20220507102705/https://twitter.com/Cyber_Sudo/status/1522885596120850432",
+      "content_type": "text/html;charset=utf-8",
+      "ok": true,
+      "error": null,
+      "tweet_id": "1522885596120850432"
+    },
+    {
+      "timestamp": "20251110180903",
+      "original_url": "https://x.com/Cyber_Sudo/status/1715291765714915641",
+      "archive_url": "https://web.archive.org/web/20251110180903/https://x.com/Cyber_Sudo/status/1715291765714915641",
+      "status_code": 200,
+      "final_url": "https://web.archive.org/web/20251110180903/https://x.com/Cyber_Sudo/status/1715291765714915641",
+      "content_type": "text/html; charset=utf-8",
+      "ok": true,
+      "error": null,
+      "tweet_id": "1715291765714915641"
+    },
+    {
+      "timestamp": "20260207103604",
+      "original_url": "https://x.com/cyber_sudo/status/2016119187697999884",
+      "archive_url": "https://web.archive.org/web/20260207103604/https://x.com/cyber_sudo/status/2016119187697999884",
+      "status_code": 200,
+      "final_url": "https://web.archive.org/web/20260207103604/https://x.com/cyber_sudo/status/2016119187697999884",
+      "content_type": "text/html; charset=utf-8",
+      "ok": true,
+      "error": null,
+      "tweet_id": "2016119187697999884"
+    }
+  ]
+}

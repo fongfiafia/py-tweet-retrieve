@@ -1,0 +1,160 @@
+{
+  "username": "Cyber_Sudo",
+  "queries": [
+    {
+      "pattern": "twitter.com/Cyber_Sudo",
+      "rows": [
+        {
+          "timestamp": "20230305102727",
+          "original": "https://twitter.com/cyber_sudo",
+          "statuscode": "200",
+          "mimetype": "text/html",
+          "digest": "AK6TRQCJ3S4EHTF5HG4VDYIBTGLT55PX"
+        },
+        {
+          "timestamp": "20250911062600",
+          "original": "https://twitter.com/Cyber_Sudo",
+          "statuscode": "200",
+          "mimetype": "text/html",
+          "digest": "RAE3RXFCTZJPHVPG3MPXLGPQJRSGMYZ6"
+        }
+      ],
+      "row_count": 2,
+      "error": null,
+      "pages": 1,
+      "truncated": false
+    },
+    {
+      "pattern": "twitter.com/Cyber_Sudo/*",
+      "rows": [
+        {
+          "timestamp": "20230305102727",
+          "original": "https://twitter.com/cyber_sudo",
+          "statuscode": "200",
+          "mimetype": "text/html",
+          "digest": "AK6TRQCJ3S4EHTF5HG4VDYIBTGLT55PX"
+        },
+        {
+          "timestamp": "20250911062600",
+          "original": "https://twitter.com/Cyber_Sudo",
+          "statuscode": "200",
+          "mimetype": "text/html",
+          "digest": "RAE3RXFCTZJPHVPG3MPXLGPQJRSGMYZ6"
+        },
+        {
+          "timestamp": "20220301132519",
+          "original": "https://twitter.com/Cyber_Sudo/status/1498650544851853312",
+          "statuscode": "200",
+          "mimetype": "text/html",
+          "digest": "F5B426RSKLZB74C3LIBWU4Y3WXTIUKLZ"
+        },
+        {
+          "timestamp": "20220314145948",
+          "original": "https://twitter.com/Cyber_Sudo/status/1503385291788365828",
+          "statuscode": "200",
+          "mimetype": "text/html",
+          "digest": "D6UHISIWTVKL4QXYDJYLYNDO3QVUDW23"
+        },
+        {
+          "timestamp": "20220315201637",
+          "original": "https://twitter.com/Cyber_Sudo/status/1503827200788869129",
+          "statuscode": "200",
+          "mimetype": "text/html",
+          "digest": "TQPR7OFIYJPHKDA5VYCYHVXZKIMOYOKG"
+        },
+        {
+          "timestamp": "20220507102705",
+          "original": "https://twitter.com/Cyber_Sudo/status/1522885596120850432",
+          "statuscode": "200",
+          "mimetype": "text/html",
+          "digest": "OXNCBUATTMUJLLWEBVGU2SBRJXQRZ6XL"
+        },
+        {
+          "timestamp": "20230406192349",
+          "original": "https://twitter.com/cyber_sudo%5CnTikTok",
+          "statuscode": "200",
+          "mimetype": "text/html",
+          "digest": "2SFUKLTXSA4CRE6TDFDLUEWP56PYK6JB"
+        }
+      ],
+      "row_count": 7,
+      "error": null,
+      "pages": 1,
+      "truncated": false
+    },
+    {
+      "pattern": "x.com/Cyber_Sudo",
+      "rows": [
+        {
+          "timestamp": "20250515040121",
+          "original": "https://x.com/Cyber_Sudo",
+          "statuscode": "200",
+          "mimetype": "text/html",
+          "digest": "3I3MMYGEOYCSRQDGWUNKRGDBRQFIJLSH"
+        },
+        {
+          "timestamp": "20251222072318",
+          "original": "https://x.com/Cyber_Sudo",
+          "statuscode": "200",
+          "mimetype": "text/html",
+          "digest": "QE66WLITGKJIZBEKZY2JTTWINUPRQ37Y"
+        }
+      ],
+      "row_count": 2,
+      "error": null,
+      "pages": 1,
+      "truncated": false
+    },
+    {
+      "pattern": "x.com/Cyber_Sudo/*",
+      "rows": [
+        {
+          "timestamp": "20250515040121",
+          "original": "https://x.com/Cyber_Sudo",
+          "statuscode": "200",
+          "mimetype": "text/html",
+          "digest": "3I3MMYGEOYCSRQDGWUNKRGDBRQFIJLSH"
+        },
+        {
+          "timestamp": "20251222072318",
+          "original": "https://x.com/Cyber_Sudo",
+          "statuscode": "200",
+          "mimetype": "text/html",
+          "digest": "QE66WLITGKJIZBEKZY2JTTWINUPRQ37Y"
+        },
+        {
+          "timestamp": "20251110180903",
+          "original": "https://x.com/Cyber_Sudo/status/1715291765714915641",
+          "statuscode": "200",
+          "mimetype": "text/html",
+          "digest": "5ATXTSIJJESXO3IUOXVEPRU2WZXLOZKD"
+        },
+        {
+          "timestamp": "20251226061241",
+          "original": "https://x.com/Cyber_Sudo/status/1715291765714915641/photo/1",
+          "statuscode": "200",
+          "mimetype": "text/html",
+          "digest": "VOH5HMT4GHLBIEYE46ZMJMJCEHQSHJHK"
+        },
+        {
+          "timestamp": "20260207103604",
+          "original": "https://x.com/cyber_sudo/status/2016119187697999884",
+          "statuscode": "200",
+          "mimetype": "text/html",
+          "digest": "XF45FG42L4SQ2QFGYHKFIPLDCHO4UVSI"
+        },
+        {
+          "timestamp": "20260207103540",
+          "original": "https://x.com/cyber_sudo/status/2016119187697999884%0A",
+          "statuscode": "200",
+          "mimetype": "text/html",
+          "digest": "BRP4RIO4P73VCKVF4PHYLWIN7GVNE3GE"
+        }
+      ],
+      "row_count": 6,
+      "error": null,
+      "pages": 1,
+      "truncated": false
+    }
+  ]
+}
