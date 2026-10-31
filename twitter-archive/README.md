@@ -5,21 +5,32 @@ Twitter/X 历史推文存档查询工具。通过 Internet Archive 的 Wayback M
 
 不使用 Selenium/Playwright，不调用 X 官方 API，不做登录绕过。
 
-## 用法
+## 运行方式
 
 ```bash
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 
-# 默认查询 Cyber_Sudo
-.venv/bin/python main.py
+# 历史存档查询（第一阶段）
+.venv/bin/python main.py --proxy http://127.0.0.1:7897
 
-# 自定义参数
-.venv/bin/python main.py --user SomeUser --output output --pause 1.5 --timeout 60
-.venv/bin/python main.py --max-fetch 50        # 只验证前 50 条推文的快照
-.venv/bin/python main.py --skip-verify         # 只做 CDX 查询与推文识别
-.venv/bin/python main.py -v                    # DEBUG 日志
+# 本地调试页面
+.venv/bin/python local_server.py --proxy http://127.0.0.1:7897
+# 打开 http://127.0.0.1:8000
 ```
+
+## 推文状态检测与媒体展示（第一阶段）
+
+- `x_status_checker.py` — 通过 X Syndication 接口（`cdn.syndication.twimg.com/tweet-result`，
+  token 按 react-tweet 同款算法动态计算）检测推文当前状态：active / deleted / unavailable / unknown。
+  404/403/429 一律不判定为删除，不确定时保留 unknown。可独立运行：
+  `.venv/bin/python x_status_checker.py --proxy http://127.0.0.1:7897`
+- `media_extractor.py` — 从 Syndication JSON 提取图片（?name=orig 原图）、视频（最高 bitrate MP4）、GIF（animated_gif）。
+- `local_server.py` — 纯标准库本地服务：`/api/data` 读本地 JSON，`/api/inspect` 启动检测，
+  `/api/inspect/progress` 轮询进度；检测结果原子写入 `output/x_status_results.json`。
+- `static/` — 原生 HTML/CSS/JS 调试页面：统计区、状态/媒体筛选、推文卡片、
+  图片网格（点击开原图）、视频页内播放、媒体加载失败兜底。
+  Debug Preview 按钮只读本地 JSON，不产生任何外部请求。
 
 ## 命令行参数
 
@@ -38,17 +49,22 @@ python3 -m venv .venv
 
 ```text
 twitter-archive/
-├── main.py            # 入口、命令行参数、整体流程
+├── main.py            # 入口、命令行参数、整体流程（Wayback 存档查询）
 ├── cdx_client.py      # CDX API 请求、重试、resumeKey 分页
 ├── archive_fetcher.py # 历史快照访问验证（仅可达性，不解析 HTML）
 ├── tweet_parser.py    # 推文 URL 识别、推文 ID 去重
 ├── exporter.py        # JSON/CSV 导出、统计报告
+├── x_status_checker.py # 推文当前状态检测（X Syndication）
+├── media_extractor.py  # Syndication 媒体资源提取
+├── local_server.py     # 本地调试页面服务（标准库）
+├── static/             # 前端页面（原生 HTML/CSS/JS）
 ├── requirements.txt
 └── output/
     ├── cdx_results.json     # 各 URL 模式的 CDX 原始结果与查询日志
     ├── tweets.json          # 去重后的推文列表（含每个推文的全部快照）
     ├── tweets.csv           # 每行 = 一条推文的一个历史快照
-    └── verify_results.json  # 快照访问验证结果
+    ├── verify_results.json  # 快照访问验证结果
+    └── x_status_results.json # 推文当前状态与媒体检测结果
 ```
 
 ## 实现要点

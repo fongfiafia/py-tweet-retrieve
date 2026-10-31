@@ -1,0 +1,111 @@
+{
+  "generated_at": "2026-10-31T09:15:25Z",
+  "total_tweets": 6,
+  "statistics": {
+    "active": 3,
+    "deleted": 3,
+    "unavailable": 0,
+    "unknown": 0
+  },
+  "tweets": [
+    {
+      "tweet_id": "1498650544851853312",
+      "current_status": "active",
+      "status_source": "x_syndication",
+      "http_status": 200,
+      "checked_at": "2026-10-31T09:15:15Z",
+      "evidence": null,
+      "error": null,
+      "text": "From a Real Name to a Home Address [OSINT] | How I've got Scammed?\n\nhttps://t.co/GLStpfhMx0\n\n#OSINT #cybersecurity #hacking #security #hacker #infosec #ethicalhacking #cybercrime #linux #hackers #tech #cyber #informationsecurity #data_leaked #kalilinux #malware #CyberAttack https://t.co/xR4HFpTyX0",
+      "author": {
+        "name": "CyberSudo",
+        "screen_name": "Cyber_Sudo"
+      },
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/FMxGtmaXIAkshJE.jpg?name=orig",
+          "preview_image_url": null,
+          "width": 1920,
+          "height": 1080,
+          "duration_ms": null
+        }
+      ]
+    },
+    {
+      "tweet_id": "1503385291788365828",
+      "current_status": "deleted",
+      "status_source": "x_syndication",
+      "http_status": 200,
+      "checked_at": "2026-10-31T09:15:17Z",
+      "evidence": "Tombstone 提示删除: TimelineUrl https://help.x.com/rules-and-policies/notices-on-x ExternalUrl This Post was deleted by the Post author. Learn more",
+      "error": null,
+      "text": null,
+      "author": null,
+      "media": []
+    },
+    {
+      "tweet_id": "1503827200788869129",
+      "current_status": "active",
+      "status_source": "x_syndication",
+      "http_status": 200,
+      "checked_at": "2026-10-31T09:15:19Z",
+      "evidence": null,
+      "error": null,
+      "text": "Find Someone’s LinkedIn Email using Data Set [Advanced OSINT]\n\nhttps://t.co/8MH17yuJuU \n\n#OSINT #cybersecurity #hacking #security #hacker #infosec #ethicalhacking #cybercrime #linux #hackers #tech #cyber #informationsecurity #data_leaked #kalilinux #malware #cyberattacks",
+      "author": {
+        "name": "CyberSudo",
+        "screen_name": "Cyber_Sudo"
+      },
+      "media": []
+    },
+    {
+      "tweet_id": "1522885596120850432",
+      "current_status": "deleted",
+      "status_source": "x_syndication",
+      "http_status": 200,
+      "checked_at": "2026-10-31T09:15:21Z",
+      "evidence": "Tombstone 提示删除: TimelineUrl https://help.x.com/rules-and-policies/notices-on-x ExternalUrl This Post was deleted by the Post author. Learn more",
+      "error": null,
+      "text": null,
+      "author": null,
+      "media": []
+    },
+    {
+      "tweet_id": "1715291765714915641",
+      "current_status": "deleted",
+      "status_source": "x_syndication",
+      "http_status": 200,
+      "checked_at": "2026-10-31T09:15:22Z",
+      "evidence": "Tombstone 提示删除: TimelineUrl https://help.x.com/rules-and-policies/notices-on-x ExternalUrl This Post was deleted by the Post author. Learn more",
+      "error": null,
+      "text": null,
+      "author": null,
+      "media": []
+    },
+    {
+      "tweet_id": "2016119187697999884",
+      "current_status": "active",
+      "status_source": "x_syndication",
+      "http_status": 200,
+      "checked_at": "2026-10-31T09:15:24Z",
+      "evidence": null,
+      "error": null,
+      "text": "TGSpyder: Your Telegram OSINT Assistant 📲🔍\n\nTelegram hides a lot of data behind groups and channels, but OSINT doesn’t have to wait.\n\nTGSpyder is a command-line tool built for investigators, analysts, journalists, and researchers.\n\nIt helps you:\n✅ Scrape member lists from https://t.co/kadkUQH8Lf",
+      "author": {
+        "name": "CyberSudo",
+        "screen_name": "Cyber_Sudo"
+      },
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/G_qxtjRW8AEn64O.png?name=orig",
+          "preview_image_url": null,
+          "width": 953,
+          "height": 362,
+          "duration_ms": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>X/Twitter Archive Inspector</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <h1>X/Twitter Archive Inspector</h1>
+    <p class="subtitle">Historical Tweets, Current Status &amp; Media</p>
+    <p class="source" id="data-source"></p>
+  </header>
+
+  <section class="stats" id="stats"></section>
+
+  <section class="toolbar">
+    <button id="btn-inspect" type="button">Start Inspection</button>
+    <button id="btn-debug" type="button">Debug Preview</button>
+    <button id="btn-reload" type="button">Reload</button>
+    <select id="filter-status" aria-label="按状态筛选">
+      <option value="all">全部状态</option>
+      <option value="active">Active</option>
+      <option value="deleted">Deleted</option>
+      <option value="unavailable">Unavailable</option>
+      <option value="unknown">Unknown</option>
+    </select>
+    <label class="checkbox"><input type="checkbox" id="filter-media"> 仅含媒体</label>
+    <span id="progress" class="progress"></span>
+  </section>
+
+  <main id="list"></main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
