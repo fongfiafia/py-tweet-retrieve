@@ -2,9 +2,11 @@
 
 - GET  /                  → static/index.html
 - GET  /style.css /app.js → 静态资源
-- GET  /api/data          → 合并返回 tweets.json 与 x_status_results.json（可不存在）
+- GET  /api/data          → 合并返回 tweets.json / x_status_results.json / media_recovery_results.json
 - GET  /api/inspect/progress → 检测进度
 - POST /api/inspect       → 启动一次检测（不请求 Wayback CDX）
+- GET  /api/recover/progress → 媒体恢复进度
+- POST /api/recover       → 启动删除推文媒体恢复（不执行 Syndication）
 """
 
 import argparse
@@ -16,6 +18,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from cdx_client import build_session
+from historical_media_recovery import build_targets, run_recovery
 from x_status_checker import load_tweets, run_inspection, save_results
 
 logger = logging.getLogger("local_server")
@@ -43,6 +46,20 @@ INSPECT_STATE = {
 
 # 由 main() 注入的检测配置
 INSPECT_CONFIG = {}
+
+# 媒体恢复任务状态与配置
+RECOVER_STATE = {
+    "running": False,
+    "finished": True,
+    "error": None,
+    "total": 0,
+    "done": 0,
+    "success": 0,
+    "failed": 0,
+    "current_tweet_id": None,
+    "last_event": None,
+}
+RECOVER_CONFIG = {}
 
 
 def _reset_state(total: int) -> None:
@@ -87,6 +104,51 @@ def _inspection_worker() -> None:
         INSPECT_STATE["error"] = str(exc)
         INSPECT_STATE["finished"] = True
         logger.exception("检测任务失败")
+
+
+def _on_recover_progress(event: dict) -> None:
+    etype = event.get("type")
+    if etype == "start":
+        RECOVER_STATE.update({
+            "running": True, "finished": False, "error": None,
+            "total": event.get("total", 0), "done": 0,
+            "success": 0, "failed": 0, "current_tweet_id": None,
+            "last_event": None,
+        })
+    elif etype == "tweet_start":
+        RECOVER_STATE["current_tweet_id"] = event.get("tweet_id")
+        RECOVER_STATE["last_event"] = event
+    elif etype == "tweet_done":
+        RECOVER_STATE["done"] = event.get("index", 0)
+        if event.get("ok"):
+            RECOVER_STATE["success"] += 1
+        else:
+            RECOVER_STATE["failed"] += 1
+
+
+def _recovery_worker() -> None:
+    try:
+        targets = build_targets(INSPECT_CONFIG["output_dir"])
+        RECOVER_STATE["total"] = len(targets)
+        if not targets:
+            RECOVER_STATE["error"] = "没有 deleted 推文可恢复"
+            RECOVER_STATE["finished"] = True
+            return
+        session = build_session(proxy=RECOVER_CONFIG.get("proxy"))
+        payload = run_recovery(
+            session, targets,
+            pause=RECOVER_CONFIG.get("pause", 1.0),
+            timeout=RECOVER_CONFIG.get("timeout", 30.0),
+            retries=RECOVER_CONFIG.get("retries", 2),
+            on_progress=_on_recover_progress,
+        )
+        save_results(INSPECT_CONFIG["output_dir"] / "media_recovery_results.json", payload)
+        RECOVER_STATE["finished"] = True
+        logger.info("媒体恢复完成: %s", payload["statistics"])
+    except Exception as exc:
+        RECOVER_STATE["error"] = str(exc)
+        RECOVER_STATE["finished"] = True
+        logger.exception("媒体恢复任务失败")
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -140,32 +202,53 @@ class Handler(BaseHTTPRequestHandler):
                 "tweets_data": self._read_json_file(INSPECT_CONFIG["output_dir"] / "tweets.json"),
                 "status_results": self._read_json_file(
                     INSPECT_CONFIG["output_dir"] / "x_status_results.json"),
+                "recovery_results": self._read_json_file(
+                    INSPECT_CONFIG["output_dir"] / "media_recovery_results.json"),
             })
         elif path == "/api/inspect/progress":
             self._send_json(dict(INSPECT_STATE))
+        elif path == "/api/recover/progress":
+            self._send_json(dict(RECOVER_STATE))
         else:
             self._send_json({"error": "not found"}, 404)
 
     def do_POST(self) -> None:
         path = urlparse(self.path).path
-        if path != "/api/inspect":
-            self._send_json({"error": "not found"}, 404)
+        if path == "/api/inspect":
             if self.headers.get("Content-Length"):
                 self.rfile.read(int(self.headers["Content-Length"]))
-            return
+            if INSPECT_STATE["running"] and not INSPECT_STATE["finished"]:
+                self._send_json({"error": "检测正在进行中", "progress": dict(INSPECT_STATE)}, 409)
+                return
+            tweets_path = INSPECT_CONFIG["output_dir"] / "tweets.json"
+            if not tweets_path.is_file():
+                self._send_json({"error": f"缺少 {tweets_path}，请先运行 main.py"}, 400)
+                return
+            _reset_state(0)
+            threading.Thread(target=_inspection_worker, daemon=True).start()
+            self._send_json({"ok": True, "progress": dict(INSPECT_STATE)})
+        elif path == "/api/recover":
+            if self.headers.get("Content-Length"):
+                self.rfile.read(int(self.headers["Content-Length"]))
+            self._handle_recover()
+        else:
+            self._send_json({"error": "not found"}, 404)
 
-        if INSPECT_STATE["running"] and not INSPECT_STATE["finished"]:
-            self._send_json({"error": "检测正在进行中", "progress": dict(INSPECT_STATE)}, 409)
+    def _handle_recover(self) -> None:
+        if RECOVER_STATE["running"] and not RECOVER_STATE["finished"]:
+            self._send_json({"error": "恢复任务正在进行中", "progress": dict(RECOVER_STATE)}, 409)
             return
-
+        status_path = INSPECT_CONFIG["output_dir"] / "x_status_results.json"
         tweets_path = INSPECT_CONFIG["output_dir"] / "tweets.json"
-        if not tweets_path.is_file():
-            self._send_json({"error": f"缺少 {tweets_path}，请先运行 main.py"}, 400)
-            return
-
-        _reset_state(0)
-        threading.Thread(target=_inspection_worker, daemon=True).start()
-        self._send_json({"ok": True, "progress": dict(INSPECT_STATE)})
+        for p in (status_path, tweets_path):
+            if not p.is_file():
+                self._send_json({"error": f"缺少 {p}，请先运行 main.py 与状态检测"}, 400)
+                return
+        RECOVER_STATE.update({"running": True, "finished": False, "error": None,
+                              "total": 0, "done": 0, "success": 0, "failed": 0,
+                              "current_tweet_id": None, "last_event": None})
+        threading.Thread(target=_recovery_worker, daemon=True).start()
+        self._send_json({"ok": True, "progress": dict(RECOVER_STATE)})
 
     def log_message(self, fmt, *args) -> None:  # 静默默认访问日志
         logger.debug("%s " + fmt, self.address_string(), *args)
@@ -187,7 +270,7 @@ def main() -> None:
                         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
                         datefmt="%H:%M:%S")
 
-    global INSPECT_CONFIG
+    global INSPECT_CONFIG, RECOVER_CONFIG
     INSPECT_CONFIG = {
         "output_dir": args.output,
         "pause": args.pause,
@@ -195,6 +278,7 @@ def main() -> None:
         "retries": args.retries,
         "proxy": args.proxy,
     }
+    RECOVER_CONFIG = dict(INSPECT_CONFIG)
 
     server = ThreadingHTTPServer((args.host, args.port), Handler)
     logger.info("页面地址: http://%s:%d", args.host, args.port)

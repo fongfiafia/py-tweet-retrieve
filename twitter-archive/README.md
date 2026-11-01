@@ -32,6 +32,24 @@ python3 -m venv .venv
   图片网格（点击开原图）、视频页内播放、媒体加载失败兜底。
   Debug Preview 按钮只读本地 JSON，不产生任何外部请求。
 
+## 已删除推文的历史媒体恢复（Deleted Tweet Media Recovery）
+
+- `historical_media_recovery.py` — 针对 `current_status=deleted` 的推文：
+  1. 遍历其全部 Wayback 历史快照（按时间排序，优先 `id_` 修饰符取原始归档响应，失败退回普通回放）；
+  2. 从 HTML / 内嵌 JSON 提取媒体 URL（pbs.twimg.com/media、video.twimg.com、og:image 等，
+     解码 HTML entity 与 JSON 转义，按 base URL 去重并保留来源快照；识别 `tweet_video` 路径为 animated_gif，缩略图不误判为视频）；
+  3. 每个媒体 URL 先验证原始 X CDN（校验 Content-Type，不只看 200）；
+  4. 不可访问则单独查询 Wayback CDX（带缓存、URL 编码、按 MIME 过滤、优先接近推文快照时间），
+     用实际返回的 timestamp 构造 `{ts}id_/{original}` 并再次验证 Content-Type；
+  5. 状态：recovered / url_found / not_archived / unknown（`recovered` 必须经实际媒体响应验证）；
+  6. 同时从 og:title / og:description 恢复推文正文与作者（twitter.com 时期快照有效，
+     x.com SPA 快照无 meta 数据时如实记录为空）。
+  可独立运行：`.venv/bin/python historical_media_recovery.py --proxy http://127.0.0.1:7897`
+- 结果写入 `output/media_recovery_results.json`（原子保存，不覆盖其他文件）。
+- 页面新增 Recover Deleted Media 按钮、恢复统计区、deleted 推文卡片的恢复区域
+  （恢复来源 Original CDN / Wayback、存档时间、打开媒体入口、失败原因）。
+  Debug Preview 完全离线，会读取已存在的恢复结果。
+
 ## 命令行参数
 
 | 参数 | 默认值 | 说明 |
@@ -56,6 +74,7 @@ twitter-archive/
 ├── exporter.py        # JSON/CSV 导出、统计报告
 ├── x_status_checker.py # 推文当前状态检测（X Syndication）
 ├── media_extractor.py  # Syndication 媒体资源提取
+├── historical_media_recovery.py # 已删除推文的历史媒体恢复
 ├── local_server.py     # 本地调试页面服务（标准库）
 ├── static/             # 前端页面（原生 HTML/CSS/JS）
 ├── requirements.txt
@@ -64,7 +83,8 @@ twitter-archive/
     ├── tweets.json          # 去重后的推文列表（含每个推文的全部快照）
     ├── tweets.csv           # 每行 = 一条推文的一个历史快照
     ├── verify_results.json  # 快照访问验证结果
-    └── x_status_results.json # 推文当前状态与媒体检测结果
+    ├── x_status_results.json # 推文当前状态与媒体检测结果
+    └── media_recovery_results.json # 已删除推文的历史媒体恢复结果
 ```
 
 ## 实现要点

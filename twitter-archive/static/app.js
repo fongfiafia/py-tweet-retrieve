@@ -3,6 +3,7 @@
 const state = {
   tweetsData: null,      // output/tweets.json 内容
   statusResults: null,   // output/x_status_results.json 内容
+  recoveryResults: null, // output/media_recovery_results.json 内容
   filterStatus: "all",
   filterMedia: false,
 };
@@ -114,6 +115,63 @@ function shortUrl(url) {
   } catch { return url; }
 }
 
+/** 恢复结果按 tweet_id 索引 */
+function recoveryMap() {
+  const map = new Map();
+  if (state.recoveryResults && Array.isArray(state.recoveryResults.tweets)) {
+    for (const t of state.recoveryResults.tweets) {
+      map.set(String(t.tweet_id), t);
+    }
+  }
+  return map;
+}
+
+/** deleted 推文卡片的媒体恢复区域 */
+function renderRecoveryArea(tweetId, map) {
+  const rec = map.get(String(tweetId));
+  if (!rec) return "";
+  const SRC_TEXT = { original_cdn: "Original CDN", wayback: "Wayback", none: "-" };
+  const recText = (rec.recovered_text || rec.recovered_author)
+    ? `<div class="recovery-text">
+        ${rec.recovered_author ? `<div class="author">${esc(rec.recovered_author)} <span class="meta">恢复自存档</span></div>` : ""}
+        ${rec.recovered_text ? `<p class="text">${esc(rec.recovered_text)}</p>` : ""}
+      </div>`
+    : "";
+  let mediaHtml;
+  if (!rec.media || rec.media.length === 0) {
+    mediaHtml = `<div class="recovery-note">未发现媒体 URL（已检查快照 ${rec.snapshots_checked}/${rec.snapshots_total}）</div>`;
+  } else {
+    mediaHtml = `<div class="media-grid">` + rec.media.map((m) => {
+      const srcBadge = m.recovery_source === "original_cdn"
+        ? `<span class="media-tag">Original CDN</span>`
+        : m.recovery_source === "wayback"
+          ? `<span class="media-tag">Wayback ${m.archive_timestamp ? esc(m.archive_timestamp.slice(0, 8)) : ""}</span>`
+          : `<span class="media-tag">${esc(m.recovery_status)}</span>`;
+      if (m.recovery_status === "recovered" && m.display_url) {
+        const openLink = `<a class="open-link" href="${esc(m.display_url)}" target="_blank" rel="noopener">打开媒体</a>`;
+        if (m.type === "photo") {
+          return `<div class="media-item">${srcBadge}
+            <a href="${esc(m.display_url)}" target="_blank" rel="noopener">
+              <img src="${esc(m.display_url)}" loading="lazy" alt="recovered photo"
+                   onerror="this.outerHTML='<div class=\\'media-fail\\'>图片加载失败</div>'">
+            </a>${openLink}</div>`;
+        }
+        return `<div class="media-item">${srcBadge}
+          <video controls preload="metadata" src="${esc(m.display_url)}"
+            onerror="this.outerHTML='<div class=\\'media-fail\\'>视频加载失败</div>'"
+          ></video>${openLink}</div>`;
+      }
+      return `<div class="media-item">${srcBadge}
+        <div class="media-fail">未恢复 (${esc(m.recovery_status)})<br>${esc((m.evidence || m.error || "").slice(0, 90))}</div></div>`;
+    }).join("") + `</div>`;
+  }
+  return `<div class="recovery">
+    <div class="media-count">媒体恢复: 找到 ${rec.media_count} · 恢复 ${rec.recovered_media_count} · 已检查快照 ${rec.snapshots_checked}/${rec.snapshots_total}${rec.pic_twitter_links ? ` · pic.twitter.com 链接 ${rec.pic_twitter_links} 个` : ""}</div>
+    ${recText}
+    ${mediaHtml}
+  </div>`;
+}
+
 function renderList(rows) {
   const list = $("#list");
   if (rows.length === 0) {
@@ -129,6 +187,7 @@ function renderList(rows) {
     list.innerHTML = `<div class="empty">当前筛选条件下没有推文。</div>`;
     return;
   }
+  const recMap = recoveryMap();
   list.innerHTML = filtered.map((r) => {
     const xUrl = r.original_url || `https://x.com/i/web/status/${r.tweet_id}`;
     const author = r.author
@@ -149,18 +208,42 @@ function renderList(rows) {
       ${evidence}
       ${renderMedia(r.media)}
       <div class="media-count">媒体数量: ${r.media.length}</div>
+      ${r.status === "deleted" ? renderRecoveryArea(r.tweet_id, recMap) : ""}
     </article>`;
   }).join("");
+}
+
+function renderRecoveryStats(recovery) {
+  const el = $("#recovery-stats");
+  if (!recovery) {
+    el.innerHTML = "";
+    return;
+  }
+  const s = recovery.statistics || {};
+  const items = [
+    ["Deleted Tweets", recovery.total_deleted_tweets, "deleted"],
+    ["Snapshots Checked", (recovery.tweets || []).reduce((a, t) => a + (t.snapshots_checked || 0), 0), ""],
+    ["Media URLs Found", recovery.total_media_found, ""],
+    ["Original CDN Accessible", s.original_cdn_accessible || 0, "active"],
+    ["Wayback Media Recovered", s.wayback_recovered || 0, "active"],
+    ["Not Archived", s.not_archived || 0, ""],
+    ["Unknown", s.unknown || 0, "unknown"],
+  ];
+  el.innerHTML = items.map(([label, num, cls]) =>
+    `<div class="stat ${cls}"><div class="num">${num}</div><div class="label">${esc(label)}</div></div>`
+  ).join("");
 }
 
 function render() {
   const rows = buildView();
   renderStats(rows);
+  renderRecoveryStats(state.recoveryResults);
   renderList(rows);
   $("#data-source").textContent =
     `data source: output/tweets.json` +
     (state.statusResults ? ` + output/x_status_results.json (${state.statusResults.generated_at})`
-                         : ` (无状态检测结果)`);
+                         : ` (无状态检测结果)`) +
+    (state.recoveryResults ? ` + output/media_recovery_results.json (${state.recoveryResults.generated_at})` : "");
 }
 
 async function loadData() {
@@ -168,6 +251,7 @@ async function loadData() {
   const data = await resp.json();
   state.tweetsData = data.tweets_data;
   state.statusResults = data.status_results;
+  state.recoveryResults = data.recovery_results || null;
   render();
 }
 
@@ -215,8 +299,48 @@ function pollProgress() {
   }, 1000);
 }
 
+// ---- Recover Deleted Media：只针对 deleted 推文恢复历史媒体，不执行 Syndication ----
+async function startRecovery() {
+  setButtonsDisabled(true);
+  try {
+    const resp = await fetch("/api/recover", { method: "POST" });
+    if (resp.status === 409) {
+      const data = await resp.json();
+      alert(data.error || "恢复任务正在进行中");
+      return;
+    }
+    if (!resp.ok) {
+      const data = await resp.json();
+      alert(data.error || "启动恢复失败");
+      return;
+    }
+    pollRecovery();
+  } finally {
+    setButtonsDisabled(false);
+  }
+}
+
+function pollRecovery() {
+  const timer = setInterval(async () => {
+    let p;
+    try {
+      const resp = await fetch("/api/recover/progress");
+      p = await resp.json();
+    } catch { return; }
+    const pct = p.total > 0 ? ` (${Math.round((p.done / p.total) * 100)}%)` : "";
+    $("#progress").textContent = p.finished
+      ? `恢复结束: 成功 ${p.success} / 失败 ${p.failed}${p.error ? " · 错误: " + p.error : ""}`
+      : `恢复中 ${p.done || 0}/${p.total}${pct} · 当前: ${p.current_tweet_id || "-"} · 成功 ${p.success} 失败 ${p.failed}`;
+    if (p.finished) {
+      clearInterval(timer);
+      await loadData();
+    }
+  }, 1000);
+}
+
 // ---- 事件绑定 ----
 $("#btn-inspect").addEventListener("click", startInspection);
+$("#btn-recover").addEventListener("click", startRecovery);
 $("#btn-debug").addEventListener("click", loadData); // Debug Preview：只读本地 JSON，零外部请求
 $("#btn-reload").addEventListener("click", loadData);
 $("#filter-status").addEventListener("change", (e) => {

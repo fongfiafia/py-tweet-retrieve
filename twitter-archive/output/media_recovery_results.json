@@ -1,0 +1,161 @@
+{
+  "generated_at": "2026-11-01T02:00:57Z",
+  "total_deleted_tweets": 3,
+  "total_media_found": 2,
+  "total_media_recovered": 2,
+  "statistics": {
+    "original_cdn_accessible": 0,
+    "wayback_recovered": 2,
+    "url_found": 0,
+    "not_archived": 0,
+    "unknown": 0
+  },
+  "tweets": [
+    {
+      "tweet_id": "1503385291788365828",
+      "recovery_status": "recovered",
+      "snapshots_total": 1,
+      "snapshots_checked": 1,
+      "snapshots_failed": 0,
+      "snapshot_details": [
+        {
+          "timestamp": "20220314145948",
+          "snapshot_url": "https://web.archive.org/web/20220314145948/https://twitter.com/Cyber_Sudo/status/1503385291788365828",
+          "ok": true,
+          "mode": "id_",
+          "http_status": 200,
+          "error": null,
+          "media_counts": {
+            "photo": 2
+          },
+          "pic_twitter_links": 0,
+          "has_text_meta": true
+        }
+      ],
+      "pic_twitter_links": 0,
+      "media_count": 1,
+      "recovered_media_count": 1,
+      "media": [
+        {
+          "type": "photo",
+          "original_url": "https://pbs.twimg.com/media/FN0Y8YtWQAYjR5k.jpg",
+          "all_found_urls": [
+            "https://pbs.twimg.com/media/FN0Y8YtWQAYjR5k.jpg",
+            "https://pbs.twimg.com/media/FN0Y8YtWQAYjR5k.jpg:large"
+          ],
+          "display_url": "https://web.archive.org/web/20220314145949id_/https://pbs.twimg.com/media/FN0Y8YtWQAYjR5k.jpg",
+          "recovery_status": "recovered",
+          "recovery_source": "wayback",
+          "width": null,
+          "height": null,
+          "content_type": "image/jpeg",
+          "content_length": "91757",
+          "archive_timestamp": "20220314145949",
+          "archive_url": "https://web.archive.org/web/20220314145949id_/https://pbs.twimg.com/media/FN0Y8YtWQAYjR5k.jpg",
+          "source_snapshot_timestamps": [
+            "20220314145948"
+          ],
+          "evidence": "原始 CDN 不可访问: https://pbs.twimg.com/media/FN0Y8YtWQAYjR5k.jpg → HTTP 404 image/jpeg | https://pbs.twimg.com/media/FN0Y8YtWQAYjR5k.jpg?format=jpg&name=orig → HTTP 404 None | https://pbs.twimg.com/media/FN0Y8YtWQAYjR5k.jpg?name=orig → HTTP 404 None",
+          "error": null
+        }
+      ],
+      "recovered_text": "RFID Cards Hacking [Cloning] Using Arduino\n\nhttps://t.co/HdJUH8Y1nS",
+      "recovered_author": "CyberSudo",
+      "text_source_timestamps": [
+        "20220314145948"
+      ]
+    },
+    {
+      "tweet_id": "1522885596120850432",
+      "recovery_status": "recovered",
+      "snapshots_total": 1,
+      "snapshots_checked": 1,
+      "snapshots_failed": 0,
+      "snapshot_details": [
+        {
+          "timestamp": "20220507102705",
+          "snapshot_url": "https://web.archive.org/web/20220507102705/https://twitter.com/Cyber_Sudo/status/1522885596120850432",
+          "ok": true,
+          "mode": "id_",
+          "http_status": 200,
+          "error": null,
+          "media_counts": {
+            "photo": 2
+          },
+          "pic_twitter_links": 0,
+          "has_text_meta": true
+        }
+      ],
+      "pic_twitter_links": 0,
+      "media_count": 1,
+      "recovered_media_count": 1,
+      "media": [
+        {
+          "type": "photo",
+          "original_url": "https://pbs.twimg.com/media/FSJgQ3mWQAYKiM0.png",
+          "all_found_urls": [
+            "https://pbs.twimg.com/media/FSJgQ3mWQAYKiM0.png",
+            "https://pbs.twimg.com/media/FSJgQ3mWQAYKiM0.png:large"
+          ],
+          "display_url": "https://web.archive.org/web/20220507102706id_/https://pbs.twimg.com/media/FSJgQ3mWQAYKiM0.png",
+          "recovery_status": "recovered",
+          "recovery_source": "wayback",
+          "width": null,
+          "height": null,
+          "content_type": "image/png",
+          "content_length": "411528",
+          "archive_timestamp": "20220507102706",
+          "archive_url": "https://web.archive.org/web/20220507102706id_/https://pbs.twimg.com/media/FSJgQ3mWQAYKiM0.png",
+          "source_snapshot_timestamps": [
+            "20220507102705"
+          ],
+          "evidence": "原始 CDN 不可访问: https://pbs.twimg.com/media/FSJgQ3mWQAYKiM0.png → HTTP 404 image/png | https://pbs.twimg.com/media/FSJgQ3mWQAYKiM0.png?format=png&name=orig → HTTP 404 None | https://pbs.twimg.com/media/FSJgQ3mWQAYKiM0.png?name=orig → HTTP 404 None",
+          "error": null
+        }
+      ],
+      "recovered_text": "https://t.co/Y8eaVVl7Pq",
+      "recovered_author": "CyberSudo",
+      "text_source_timestamps": [
+        "20220507102705"
+      ]
+    },
+    {
+      "tweet_id": "1715291765714915641",
+      "recovery_status": "no_media_found",
+      "snapshots_total": 2,
+      "snapshots_checked": 2,
+      "snapshots_failed": 0,
+      "snapshot_details": [
+        {
+          "timestamp": "20251110180903",
+          "snapshot_url": "https://web.archive.org/web/20251110180903/https://x.com/Cyber_Sudo/status/1715291765714915641",
+          "ok": true,
+          "mode": "id_",
+          "http_status": 200,
+          "error": null,
+          "media_counts": {},
+          "pic_twitter_links": 0,
+          "has_text_meta": false
+        },
+        {
+          "timestamp": "20251226061241",
+          "snapshot_url": "https://web.archive.org/web/20251226061241/https://x.com/Cyber_Sudo/status/1715291765714915641",
+          "ok": true,
+          "mode": "id_",
+          "http_status": 200,
+          "error": null,
+          "media_counts": {},
+          "pic_twitter_links": 0,
+          "has_text_meta": false
+        }
+      ],
+      "pic_twitter_links": 0,
+      "media_count": 0,
+      "recovered_media_count": 0,
+      "media": [],
+      "recovered_text": null,
+      "recovered_author": null,
+      "text_source_timestamps": []
+    }
+  ]
+}
